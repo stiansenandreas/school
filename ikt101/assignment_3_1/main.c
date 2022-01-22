@@ -1,61 +1,94 @@
 #include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
 #include <math.h>
-#define STR_LEN 20
+#define ARRAY_SIZE 10
 
 
-
-bool is_palindrome(char const word[], int len)
+int minimum(int const numbers[], int const size)
 {
-    char first_half[STR_LEN+1];
-    char second_half[STR_LEN+1];
-    int middle_index;
-    if (len%2 == 0)
+    int min= numbers[0];
+    for(int i= 1; i < size; i++)
     {
-        middle_index= len/2;
-        for (int i=0; i < middle_index; i++)
-            first_half[i]= word[i];
-        for (int i=0; i < middle_index; i++)
-            second_half[i]= word[len-i-1];
+        if(min > numbers[i])
+            min= numbers[i];
     }
-    if (len%2 != 0)
-    {
-        middle_index= floor(len/2.0);
-        for (int i=0; i < middle_index; i++)
-            first_half[i]= word[i];
-        for (int i=0; i < middle_index; i++)
-            second_half[i]= word[len-i-1];
-    }
-    if (strcmp(first_half,second_half) == 0)
-        return true;
-    else
-        return false;
-
+    return min;
 }
 
-void string_reverse(char word[], int len)
+
+int maximum(int const numbers[], int const size)
 {
-    char copied[STR_LEN+1];
-    strcpy(copied, word);
-    for (int i= 0; i < len; i++)
+    int max= numbers[0];
+    for(int i= 1; i < size; i++)
     {
-        word[i]= copied[len-i-1];
+        if(max < numbers[i])
+            max= numbers[i];
+    }
+    return max;
+}
+
+
+int sum (int const numbers[], int const size)
+{
+    int sum= numbers[0];
+    for (int i= 1; i < size; i++)
+        sum+= numbers[i];
+    return sum;
+}
+
+
+float average (int numbers[], int size)
+{
+    float average= (float)sum(numbers,size)/(float)size;
+    return average;
+}
+
+
+void sort (int numbers[], int const size)
+{
+    for (int i= 0; i < size; i++)
+    {
+        for (int j= 0; j < size-i-1; j++)
+        {
+            if (numbers[j] > numbers[j+1])
+            {
+                int swap_numbers= numbers[j];
+                numbers[j]= numbers[j+1];
+                numbers[j+1]= swap_numbers;
+            }
+        }
     }
 }
 
-int main() {
-    printf("Enter a word\n");
-    char word[STR_LEN+1];
-    scanf("%s", word);
-    int len= (int)strlen(word);
-    printf("The word contains %d letters\n", len);
-    bool palindrome= is_palindrome(word, len);
-    if (palindrome == true)
-        printf("The word is a palindrome\n");
+
+float median(int const numbers[], int size)
+{
+    float median;
+    if (size%2 == 0)
+        median= (float)((numbers[(int)floor((size-1)/2.0)] + numbers[(int)floor(size/2.0)])/2.0);
     else
-        printf("The word is not a palindrome\n");
-    string_reverse(word,len);
-    printf("The word reversed is '%s'\n", word);
+        median= (float)numbers[(int)floor(size/2.0)];
+    return median;
+}
+
+
+
+int main()
+{
+    printf("Enter 10 numbers: \n");
+    int inputArray[ARRAY_SIZE];
+    for(int i= 0; i < ARRAY_SIZE; i++)
+    {
+        scanf("%d", &inputArray[i]);
+        printf("You entered %d\n", inputArray[i]);
+    }
+    printf("Minimum: %d\n",minimum(inputArray,ARRAY_SIZE));
+    printf("Maximum: %d\n",maximum(inputArray,ARRAY_SIZE));
+    printf("Sum: %d\n",sum(inputArray,ARRAY_SIZE));
+    printf("Average: %g\n",average(inputArray,ARRAY_SIZE));
+    printf("Sorted: ");
+    sort(inputArray,ARRAY_SIZE);
+    for (int i= 0; i< ARRAY_SIZE; i++)
+        printf("%d ",inputArray[i]);
+    printf("\nMedian: %g",median(inputArray,ARRAY_SIZE));
     return 0;
 }
